@@ -1,0 +1,12 @@
+{
+  "functions": {
+    "api/scrape.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "build": {
+    "env": {
+      "PUPPETEER_SKIP_DOWNLOAD": "true"
+    }
+  }
+}
