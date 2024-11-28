@@ -1,5 +1,4 @@
-import puppeteer from "puppeteer-core";
-import chromium from "chrome-aws-lambda";
+import puppeteer from "puppeteer";
 import axios from "axios";
 import xml2js from "xml2js";
 import sharp from "sharp";
@@ -54,12 +53,7 @@ export default async function handler(req, res) {
     res.setHeader("Connection", "keep-alive");
     res.flushHeaders();
 
-    const browser = await puppeteer.launch({
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
-      args: chromium.args,
-    });
-
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     const totalUrls = urls.length;
