@@ -1,4 +1,5 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "chrome-aws-lambda";
 import axios from "axios";
 import xml2js from "xml2js";
 import sharp from "sharp";
@@ -57,7 +58,6 @@ export default async function handler(req, res) {
       process.env.NODE_ENV === "production"
         ? await puppeteer.launch({
             args: chromium.args,
-            defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
             headless: chromium.headless,
           })

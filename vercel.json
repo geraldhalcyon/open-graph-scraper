@@ -1,7 +1,12 @@
 {
   "functions": {
     "api/scrape.js": {
-      "runtime": "@vercel/node"
+      "runtime": "nodejs18.x"
+    }
+  },
+  "build": {
+    "env": {
+      "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
     }
   }
 }

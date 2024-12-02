@@ -5,6 +5,9 @@ const nextConfig = {
     loader: "custom",
     loaderFile: "./components/partials/ImageLoader.jsx",
   },
+  experimental: {
+    outputStandalone: true,
+  },
 };
 
 export default nextConfig;
