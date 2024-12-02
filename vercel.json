@@ -1,7 +1,8 @@
 {
-  "build": {
-    "env": {
-      "PUPPETEER_SKIP_DOWNLOAD": "true"
+  "version": 2,
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
     }
   }
 }
