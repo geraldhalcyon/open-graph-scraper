@@ -56,8 +56,6 @@ export default async function handler(req, res) {
     // const browser = await puppeteer.launch({ headless: true });
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath:
-        process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium",
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
@@ -103,7 +101,6 @@ export default async function handler(req, res) {
             console.error(`Error optimizing image ${imageUrl}:`, error.message);
           }
         }
-
         const eventData = {
           url: siteUrl,
           title: ogData.title,
