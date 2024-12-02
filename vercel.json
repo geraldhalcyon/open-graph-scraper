@@ -1,9 +1,4 @@
 {
-  "functions": {
-    "api/scrape.js": {
-      "runtime": "@vercel/node"
-    }
-  },
   "build": {
     "env": {
       "PUPPETEER_SKIP_DOWNLOAD": "true"
