@@ -6,7 +6,7 @@ const nextConfig = {
     loaderFile: "./components/partials/ImageLoader.jsx",
   },
   experimental: {
-    serverComponentsExternalPackages: ["puppeteer-core"],
+    serverExternalPackages: ["puppeteer-core"],
   },
 };
 
