@@ -1,7 +1,6 @@
 import chromium from "@sparticuz/chromium-min";
 import axios from "axios";
 import xml2js from "xml2js";
-import sharp from "sharp";
 
 export default async function handler(req, res) {
   let puppeteer;
@@ -67,7 +66,6 @@ export default async function handler(req, res) {
       process.env.NODE_ENV === "production"
         ? await puppeteer.launch({
             args: chromium.args,
-            // See https://www.npmjs.com/package/@sparticuz/chromium#running-locally--headlessheadful-mode for local executable path
             executablePath: await chromium.executablePath(chromiumPack),
             headless: true,
           })
@@ -76,11 +74,6 @@ export default async function handler(req, res) {
             headless: true,
           });
 
-    // const browser = await puppeteer.launch({ headless: true });
-    // const browser = await puppeteer.launch({
-    //   headless: true,
-    //   args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    // });
     const page = await browser.newPage();
 
     const totalUrls = urls.length;
@@ -109,30 +102,11 @@ export default async function handler(req, res) {
         });
 
         const imageUrl = ogData.image;
-        let optimizedImageBuffer = null;
-
-        if (imageUrl && imageUrl !== "N/A") {
-          try {
-            const imageResponse = await axios.get(imageUrl, {
-              responseType: "arraybuffer",
-            });
-            const imageBuffer = Buffer.from(imageResponse.data);
-            optimizedImageBuffer = await sharp(imageBuffer)
-              .resize(300)
-              .toBuffer();
-          } catch (error) {
-            console.error(`Error optimizing image ${imageUrl}:`, error.message);
-          }
-        }
         const eventData = {
           url: siteUrl,
           title: ogData.title,
           description: ogData.description,
-          image: optimizedImageBuffer
-            ? `data:image/jpeg;base64,${optimizedImageBuffer.toString(
-                "base64"
-              )}`
-            : ogData.image,
+          image: imageUrl !== "N/A" ? imageUrl : null,
         };
 
         res.write(`data: ${JSON.stringify(eventData)}\n\n`);
