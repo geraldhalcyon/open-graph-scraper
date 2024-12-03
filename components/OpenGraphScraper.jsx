@@ -61,6 +61,7 @@ export default function OpenGraphScraper() {
 
       newEventSource.addEventListener("close", () => {
         toast.success("All data received.");
+        setIsLoading(false);
         newEventSource.close();
       });
     } catch (err) {
@@ -136,7 +137,7 @@ export default function OpenGraphScraper() {
     });
   };
 
-  console.log(loading,'loading')
+  console.log(loading, "loading");
 
   return (
     <div className="relative min-h-screen bg-gray-50 p-8">
@@ -160,9 +161,12 @@ export default function OpenGraphScraper() {
           />
           <button
             onClick={scrapeOpenGraphData}
-            className="px-6 py-[13px] lg:py-[24px] bg-blue-600 text-white font-medium  hover:bg-blue-700 transition w-full 1sm:w-[250px]"
+            disabled={loading}
+            className={`px-6 py-[13px] lg:py-[24px] ${
+              loading ? "bg-gray-500" : "bg-blue-600 hover:bg-blue-700"
+            } text-white font-medium transition w-full 1sm:w-[250px]`}
           >
-            Scrape Open Graph Data
+            {loading ? "Scraping..." : "Scrape Open Graph Data"}
           </button>
         </div>
         <div className="text-center mt-[20px] md:mt-0 w-full md:w-[30%] lg:w-[20%] flex">
