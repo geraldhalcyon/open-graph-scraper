@@ -59,20 +59,21 @@ export default async function handler(req, res) {
     res.setHeader("Connection", "keep-alive");
     res.flushHeaders();
 
-    const chromiumPack =
-      "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
+    // const chromiumPack =
+    //   "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
 
     const browser =
-      process.env.NODE_ENV === "production"
-        ? await puppeteer.launch({
-            args: chromium.args,
-            executablePath: await chromium.executablePath(chromiumPack),
-            headless: true,
-          })
-        : await puppeteer.launch({
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            headless: true,
-          });
+      // process.env.NODE_ENV === "production"
+      //   ? await puppeteer.launch({
+      //       args: chromium.args,
+      //       executablePath: await chromium.executablePath(chromiumPack),
+      //       headless: true,
+      //     })
+      //   :
+      await puppeteer.launch({
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        headless: true,
+      });
 
     const page = await browser.newPage();
 
