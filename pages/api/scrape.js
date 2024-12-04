@@ -1,14 +1,15 @@
 import chromium from "@sparticuz/chromium-min";
 import axios from "axios";
 import xml2js from "xml2js";
+import puppeteer from "puppeteer";
 
 export default async function handler(req, res) {
-  let puppeteer;
-  if (process.env.NODE_ENV === "production") {
-    puppeteer = await import("puppeteer-core");
-  } else {
-    puppeteer = await import("puppeteer");
-  }
+  // let puppeteer;
+  // if (process.env.NODE_ENV === "production") {
+  //   puppeteer = await import("puppeteer-core");
+  // } else {
+  //   puppeteer = await import("puppeteer");
+  // }
 
   const { url } = req.query;
 
