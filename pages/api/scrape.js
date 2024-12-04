@@ -61,6 +61,9 @@ export default async function handler(req, res) {
     // const chromiumPack =
     //   "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
 
+    const chromiumExecutablePath =
+      process.env.CHROME_BIN || "/usr/bin/chromium";
+
     const browser =
       process.env.NODE_ENV === "production"
         ? await puppeteer.launch({
@@ -71,7 +74,7 @@ export default async function handler(req, res) {
               "--disable-setuid-sandbox",
               "--disable-dev-shm-usage",
             ],
-            executablePath: "/usr/bin/chromium",
+            executablePath: chromiumExecutablePath,
             headless: true,
           })
         : await puppeteer.launch({
