@@ -65,12 +65,7 @@ export default async function handler(req, res) {
     const browser =
       process.env.NODE_ENV === "production"
         ? await puppeteer.launch({
-            // args: chromium.args,
-            args: [
-              "--no-sandbox",
-              "--disable-setuid-sandbox",
-              "--disable-dev-shm-usage",
-            ],
+            args: chromium.args,
             executablePath: await chromium.executablePath(),
             headless: true,
           })
