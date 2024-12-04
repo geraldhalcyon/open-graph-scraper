@@ -1,3 +1,4 @@
+import chromium from "@sparticuz/chromium-min";
 import axios from "axios";
 import xml2js from "xml2js";
 
@@ -61,28 +62,15 @@ export default async function handler(req, res) {
     // const chromiumPack =
     //   "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
 
-    const chromiumExecutablePath =
-      process.env.CHROME_BIN || "/usr/bin/chromium";
-
     const browser =
       process.env.NODE_ENV === "production"
         ? await puppeteer.launch({
-            // args: chromium.args,
-            // executablePath: await chromium.executablePath(chromiumPack),
-            args: [
-              "--no-sandbox",
-              "--disable-setuid-sandbox",
-              "--disable-dev-shm-usage",
-            ],
-            executablePath: chromiumExecutablePath,
+            args: chromium.args,
+            executablePath: await chromium.executablePath(),
             headless: true,
           })
         : await puppeteer.launch({
-            args: [
-              "--no-sandbox",
-              "--disable-setuid-sandbox",
-              "--disable-dev-shm-usage",
-            ],
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
             headless: true,
           });
 
