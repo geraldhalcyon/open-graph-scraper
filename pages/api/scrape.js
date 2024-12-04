@@ -59,14 +59,19 @@ export default async function handler(req, res) {
     res.setHeader("Connection", "keep-alive");
     res.flushHeaders();
 
-    const chromiumPack =
-      "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
+    // const chromiumPack =
+    //   "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
 
     const browser =
       process.env.NODE_ENV === "production"
         ? await puppeteer.launch({
-            args: chromium.args,
-            executablePath: await chromium.executablePath(chromiumPack),
+            // args: chromium.args,
+            args: [
+              "--no-sandbox",
+              "--disable-setuid-sandbox",
+              "--disable-dev-shm-usage",
+            ],
+            executablePath: await chromium.executablePath(),
             headless: true,
           })
         : await puppeteer.launch({
@@ -76,14 +81,40 @@ export default async function handler(req, res) {
 
     const page = await browser.newPage();
 
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (request.resourceType() === "image") {
+        request.abort();
+      } else {
+        request.continue();
+      }
+    });
+
+    const retryGoto = async (page, url, retries = 3, timeout = 30000) => {
+      for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+          await page.goto(url, { waitUntil: "networkidle0", timeout });
+          return true;
+        } catch (error) {
+          if (attempt === retries - 1) {
+            throw error;
+          }
+          console.log(`Retrying ${url} (attempt ${attempt + 1})`);
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+      }
+    };
+
     const totalUrls = urls.length;
     let processedUrls = 0;
 
     for (const siteUrl of urls) {
       try {
-        await page.goto(siteUrl, { waitUntil: "networkidle0" });
+        await retryGoto(page, siteUrl);
 
-        await page.waitForSelector('meta[property="og:image"]');
+        await page.waitForSelector('meta[property="og:image"]', {
+          timeout: 30000,
+        });
 
         const ogData = await page.evaluate(() => {
           const getMetaContent = (property) => {

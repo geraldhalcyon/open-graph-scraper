@@ -5,9 +5,6 @@ const nextConfig = {
     loader: "custom",
     loaderFile: "./components/partials/ImageLoader.jsx",
   },
-  experimental: {
-    serverExternalPackages: ["puppeteer-core"],
-  },
 };
 
 export default nextConfig;
