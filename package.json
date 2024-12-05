@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "npx puppeteer install chrome"
   },
   "dependencies": {
     "@sparticuz/chromium-min": "^131.0.1",

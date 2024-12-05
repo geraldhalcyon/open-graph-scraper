@@ -2,16 +2,17 @@ import chromium from "@sparticuz/chromium-min";
 import axios from "axios";
 import xml2js from "xml2js";
 import sharp from "sharp";
+import puppeteer from "puppeteer";
 
 export default async function handler(req, res) {
-  let puppeteer;
-  if (process.env.NODE_ENV === "production") {
-    puppeteer = await import("puppeteer-core");
-  } else {
-    puppeteer = await import("puppeteer");
-  }
+  // let puppeteer;
+  // if (process.env.NODE_ENV === "production") {
+  //   puppeteer = await import("puppeteer-core");
+  // } else {
+  //   puppeteer = await import("puppeteer");
+  // }
 
-  console.log(puppeteer,'puppeteer')
+  console.log(puppeteer, "puppeteer");
   const { url } = req.query;
   if (!url) {
     return res.status(400).json({ error: "URL is required" });
@@ -52,20 +53,29 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
     res.flushHeaders();
-    const chromiumPack =
-      "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
+    // const chromiumPack =
+    //   "https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar";
     const browser =
-      process.env.NODE_ENV === "production"
-        ? await puppeteer.launch({
-            args: chromium.args,
-            // See https://www.npmjs.com/package/@sparticuz/chromium#running-locally--headlessheadful-mode for local executable path
-            executablePath: await chromium.executablePath(chromiumPack),
-            headless: true,
-          })
-        : await puppeteer.launch({
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            headless: true,
-          });
+      // process.env.NODE_ENV === "production"
+      //   ? await puppeteer.launch({
+      //       args: chromium.args,
+      //       executablePath: await chromium.executablePath(chromiumPack),
+      //       headless: true,
+      //     })
+      //   :
+      await puppeteer.launch({
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-accelerated-2d-canvas",
+          "--no-first-run",
+          "--no-zygote",
+          "--single-process", // Might be needed in some environments
+          "--disable-gpu",
+        ],
+        headless: true,
+      });
     // const browser = await puppeteer.launch({ headless: true });
     // const browser = await puppeteer.launch({
     //   headless: true,
